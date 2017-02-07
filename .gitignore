@@ -1,1 +1,15 @@
+*.class
+
+*.jar
+*.war
+*.ear
+
+*.iml
+*.ipr
+*.iws
+.idea
+
 .DS_Store
+/target/
+node_moduls/
+logs/
