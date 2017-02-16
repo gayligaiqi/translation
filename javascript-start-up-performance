@@ -1,23 +1,33 @@
 JavaScript Start-up Performance
 
 As web developers, we know how easy it is to end up with web page bloat. But loading a webpage is much more than shipping bytes down the wire. Once the browser has downloaded our page’s scripts it then has to parse, interpret & run them. In this post, we’ll dive into this phase for JavaScript, why it might be slowing down your app’s start-up & how you can fix it.
+web 开发者知道让网页变得臃肿不堪是很轻易的，不过加载一个网页不仅仅是用网络传输字节。浏览器开始下载页面脚本之后，它需要解析，编译以及运行。这篇博文将深入研究（探讨）JavaScript 的解析，为什么你的 app 启动速度慢，以及如何修复。
 
 Historically, we just haven’t spent a lot of time optimizing for the JavaScript Parse/Compile step. We almost expect scripts to be immediately parsed and executed as soon as the parser hits a <script> tag. But this isn’t quite the case. Here’s a simplified breakdown of how V8 works :
-
+以往，我们并没有花太多时间去优化 JavaScript 解析/编译这两步。我们期望脚本遇到 <script> 标签时立即解析和执行。但事实并非如此。下面是 V8 引擎工作原理步骤分解
 
 A simplified view of how V8 works. This is our idealized pipeline that we’re working towards.
+
 Let’s focus on some of the main phases.
 
+
 What slows our web apps from booting up?
+是什么拖慢了 web 应用的启动时间？
 
 Parsing, Compiling and Executing scripts are things a JavaScript engine spends significant time in during start-up. This matters as if it takes a while, it can delay how soon users can interact with our site. Imagine if they can see a button but not click or touch it for multiple seconds. This can degrade the user experience.
+在启动阶段，JavaScript 引擎花费了大部分时间在解析、编译和执行脚本上。这很重要，它延缓了用户与网站交互的时间。想象一下，如果用户看见了一个按钮，却几秒内无法点击，这会降低用户体验。
 
+Parse & Compile times for a popular website using V8’s Runtime Call Stats in Chrome Canary.
+下图是使用 Chrome Canary 提供的 V8’s Runtime Call Stats 分析某个热门网站解析以及编译时间
 
-Parse & Compile times for a popular website using V8’s Runtime Call Stats in Chrome Canary. Notice how a slow Parse/Compile on desktop can take far longer on average mobile phones.
+Notice how a slow Parse/Compile on desktop can take far longer on average mobile phones.
+如果在桌面端解析和编译都很缓慢的话，那么大多数手机端会花费更长时间。
+
 Start-up times matter for performance-sensitive code. In fact, V8 - Chrome’s JavaScript engine, spends a large amount of time parsing and compiling scripts on top sites like Facebook, Wikipedia and Reddit:
-
+启动时间对性能敏感的代码很重要。其实，V8
 
 The pink area (JavaScript) represents time spent in V8 and Blink’s C++, while the orange and yellow represent parse and compile.
+
 Parse and Compile have also been highlighted as a bottleneck by a number of large sites & frameworks you may be using. Below are tweets from Facebook’s Sebastian Markbage and Google’s Rob Wormald:
 
 
